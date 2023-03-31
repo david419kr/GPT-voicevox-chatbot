@@ -1,3 +1,9 @@
+혼자 쓸 용으로 대충 만들었는데 보관용으로 업로드. 일단 작동은 합니다.  
+Made for my own use, it works anyway.  
+自分用でかなりいい加減な作りです。一応、動きます。  
+
+------------------------
+
 # 1. gpdvox.py
 for CLI use. chatgpt_wrapper is required and need to authenticate with chatgpt_wrapper first  
 voicevox engine is required.  
