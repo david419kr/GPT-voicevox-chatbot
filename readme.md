@@ -12,6 +12,8 @@ ChatGPTに春日部つむぎのプロフィールを入れ、Voivevoxを通じ�
 変数やプロンプトを弄ると、Voicevoxの他キャラにも使えます。  
 自分用でかなりいい加減な作りです。一応、動きます。  
 
+[![동작 영상](https://i9.ytimg.com/vi_webp/QkXCQ3p3yTo/sddefault.webp?v=64267aa0&sqp=COT0maEG&rs=AOn4CLAjUVLXhnd0PjQghTH61oItQ-9YTA)](https://www.youtube.com/watch?v=QkXCQ3p3yTo)
+
 ------------------------
 
 # 1. gpdvox.py
