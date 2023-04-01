@@ -163,6 +163,8 @@ default_info = c.fetchone()[1]
 c.execute("SELECT * FROM girls_info WHERE name = ?", ("custom",))
 custom_info = c.fetchone()[1]
 
+info = ''
+
 if st.checkbox(f"カスタムキャラ設定を入力する{custom_info and '　※現在、カスタムキャラ設定が入力されています。'}"):
     st.markdown(""":orange[新しい会話を始めると反映されます。]:red[**チェックを外しても保存されたままなので、**]  
     :orange[基本のキャラ設定に戻したい場合は、テキスト欄を空欄にしてから新しい会話を始めてください。  
@@ -176,8 +178,8 @@ if st.checkbox(f"カスタムキャラ設定を入力する{custom_info and '　
         info = custom_info
     else:
         info = default_info + custom_info
-    
-
+if not info:
+    info = default_info
 
 if st.button("新しい会話を始める"):
     chat_history = []
