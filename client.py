@@ -6,6 +6,14 @@ import streamlit as st
 import requests, json, base64, sqlite3
 import streamlit.components.v1 as components
 
+hide_menu_style = """
+        <style>
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        </style>
+        """
+st.markdown(hide_menu_style, unsafe_allow_html=True)
+
 girls = {
     "四国めたん": {
         "ノーマル": 2,
