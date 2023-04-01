@@ -1,5 +1,5 @@
 ChatGPT에 voicevox 여캐들의 설정(혹은 커스텀 설정)을 입력하여 voicevox를 통해 목소리로 읽어주는,  
-voicevox 여캐들과 대화를 할 수 있는(것 같은 기분이 드는) 챗봇입니다.  
+voicevox 여캐들과 대화를 할 수 있는(것 같은 기분이 드는) 음성 달린 챗봇입니다.  
 파이썬은 처음 써보는거라 혼자 쓸 용으로 진짜 개발새발 대충 만들었는데 보관용으로 업로드. 일단 작동은 합니다.  
 프롬프트에 개선의 여지 있음. tumugi.db 파일에 sqlite로 기본 프롬프트 저장되어있으니 맘에 안드시면 수정해서 이용하세요.
 
@@ -8,7 +8,7 @@ First attempt using python, and roughly made for my own use, it works anyway.
 default character promps are stored in tumugi.db, you can amend it as you wish.
 
 ChatGPTにvoicevoxキャラのプロフィールを入れ、Voivevoxを通じて彼女たちの声でおしゃべりしてくれます。  
-ボイボたちと会話を楽しめる（風の）チャットボットです。今んとこ女子のみです。  
+ボイボたちと会話を楽しめる（風の）声付きチャットボットです。今んとこ女子のみです。  
 Pythonは初めてで、自分用でかなりいい加減な作りです。一応、動きます。  
 プロンプトに改善の余地ありです。デフォルトのキャラプロンプトはsqliteでtumugi.dbに格納されていますが、好きなように修正してお使いください。
 
