@@ -12,9 +12,17 @@ ChatGPTにvoicevoxキャラのプロフィールを入れ、Voivevoxを通じて
 Pythonは初めてで、自分用でかなりいい加減な作りです。一応、動きます。  
 プロンプトに改善の余地ありです。デフォルトのキャラプロンプトはsqliteでtumugi.dbに格納されていますが、好きなように修正してお使いください。
 
+１．メイン画面
 ![01main](https://user-images.githubusercontent.com/70783505/229291536-586afcd1-e3e7-490d-a49c-fc33a97458e6.png)
+
+２．音声選択
 ![01select](https://user-images.githubusercontent.com/70783505/229291539-e3f296dd-03b7-4c6f-8119-181aabdb5f23.png)
+
+３．キャラカスタマイズ
 ![02customize](https://user-images.githubusercontent.com/70783505/229291541-7cfef919-391e-4801-82e5-113b17a875d9.png)
+
+４．会話（音声リプレイ付き）
+![04replay](https://user-images.githubusercontent.com/70783505/229291988-36f43073-ca17-4d75-9f24-b17a8064fdbd.png)
 
 ------------------------
 
