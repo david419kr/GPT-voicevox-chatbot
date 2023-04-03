@@ -125,7 +125,7 @@ with st.sidebar:
         st.experimental_rerun()
     c.execute("SELECT * FROM chats WHERE id != 1")
     all_chat = c.fetchall()
-    print(all_chat)
+    
     if len(all_chat) != 0:
         current_chat_index = next(i for i, el in enumerate(all_chat) if el[6] == 1)
 
