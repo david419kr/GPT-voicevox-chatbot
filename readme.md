@@ -1,13 +1,16 @@
 # overview
 
 <strong>
-이번 업데이트로, OpenAI 유료 API키가 필요해졌습니다.  
-유료 API키를 쓰지 않으실 분들은 using-chatgpt-wrapper(legacy) 브랜치의 구버전을 이용해주세요.  
-Now you need OpenAI paid API key.  
-If you don't want to pay for API, use "using-chatgpt-wrapper(legacy)" branch.  
-今回のアップデートで、OpenAIの有料APIキーが必要になりました。  
-有料APIキーを使いたくない方は、using-chatgpt-wrapper(legacy)の旧バージョンをお使いください。
+이번 업데이트로, OpenAI 유료 API키가 필요해졌습니다.<br/>
+유료 API키를 쓰지 않으실 분들은 using-chatgpt-wrapper(legacy) 브랜치의 구버전을 이용해주세요.  <br/><br/>
+Now you need OpenAI paid API key.  <br/>
+If you don't want to pay for API, use "using-chatgpt-wrapper(legacy)" branch.  <br/><br/>
+今回のアップデートで、OpenAIの有料APIキーが必要になりました。  <br/>
+有料APIキーを使いたくない方は、using-chatgpt-wrapper(legacy)の旧バージョンをお使いください。  <br/>
 </strong>
+  <br/>
+ 
+---------------------------------------- 
 
 ChatGPT에 voicevox 여캐들의 설정(혹은 커스텀 설정)을 입력하여 voicevox를 통해 목소리로 읽어주는,  
 voicevox 여캐들과 대화를 할 수 있는(것 같은 기분이 드는) 음성 달린 챗봇입니다.  
@@ -35,8 +38,8 @@ Pythonは初めてで、自分用でかなりいい加減な作りです。一�
 
 # screenshots
 
-アップデートで会話履歴、速さ調整、返信再生成、送信取り消しが追加されました。  
-<img src=https://user-images.githubusercontent.com/70783505/229495448-ab302f50-d0b6-4b5c-b570-9c1c4a8e04ab.png width="60%" height="60%" />
+0. アップデートで会話履歴、速さ調整、返信再生成、送信取り消しが追加されました。  
+<img src=https://user-images.githubusercontent.com/70783505/229495448-ab302f50-d0b6-4b5c-b570-9c1c4a8e04ab.png width="70%" height="70%" />
 
 １．メイン画面  
 <img src=https://user-images.githubusercontent.com/70783505/229291536-586afcd1-e3e7-490d-a49c-fc33a97458e6.png width="60%" height="60%" />
@@ -52,13 +55,10 @@ Pythonは初めてで、自分用でかなりいい加減な作りです。一�
   
 ------------------------
 
-# 1. gpt_flask.py
-simple flask API for chatgpt_wrapper, to be used with voicevox 
-chatgpt_wrapper is required and need to authenticate with chatgpt_wrapper first  
-should run before client.py  
-python gpt_flask.py  
+# 1. gpt_api.py
+need to set OpenAI paid API key here.
 
 # 2. client.py
 simple chatbot frontend powered by streamlit, only for voicevox chatbot  
-voicevox engine and gpt_flask.py are required  
+voicevox engine required.  
 streamlit run client.py  
