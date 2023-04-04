@@ -1,5 +1,5 @@
 # simple chatbot frontend powered by streamlit, for voicevox chatbot
-# voicevox engine and gpt_flask.py are required
+# voicevox engine required
 # streamlit run client.py
 
 import streamlit as st
