@@ -25,20 +25,41 @@ def initBot(name, info):
 def talkBot(text, messages):
     messages.append({"role": "user", "content": text})
 
-    completion = openai.ChatCompletion.create(
-        model=model,
-        messages=messages
-    )
+    try:
+        completion = openai.ChatCompletion.create(
+            model=model,
+            messages=messages
+        )
+    except:
+        messages.pop(1)
+        messages.pop(1)
+        completion = openai.ChatCompletion.create(
+            model=model,
+            messages=messages
+        )
+    if completion.usage.prompt_tokens >= 3600:
+        messages.pop(1)  
     chat_response = completion.choices[0].message.content
     messages.append({"role": "assistant", "content": chat_response})
     return chat_response, messages
 
 def regenerate(messages):
     messages.pop()
-    completion = openai.ChatCompletion.create(
-        model=model,
-        messages=messages
-    )
+    try:
+        completion = openai.ChatCompletion.create(
+            model=model,
+            messages=messages
+        )
+    except:
+        messages.pop(1)
+        messages.pop(1)
+        completion = openai.ChatCompletion.create(
+            model=model,
+            messages=messages
+        )
+    print(completion.usage.prompt_tokens)
+    if completion.usage.prompt_tokens >= 3600:
+        messages.pop(1)    
     chat_response = completion.choices[0].message.content
     messages.append({"role": "assistant", "content": chat_response})
     return chat_response, messages
