@@ -36,22 +36,22 @@ Pythonは初めてで、自分用でかなりいい加減な作りです。一�
 6. streamlit run client.py  
 
 
-# screenshots
+# screenshots  
 
 0. アップデートで会話履歴、速さ調整、返信再生成、送信取り消しが追加されました。  
-<img src=https://user-images.githubusercontent.com/70783505/229495448-ab302f50-d0b6-4b5c-b570-9c1c4a8e04ab.png width="70%" height="70%" />
+<img src=https://user-images.githubusercontent.com/70783505/229495448-ab302f50-d0b6-4b5c-b570-9c1c4a8e04ab.png width="80%" height="80%" />
 
 １．メイン画面  
-<img src=https://user-images.githubusercontent.com/70783505/229291536-586afcd1-e3e7-490d-a49c-fc33a97458e6.png width="60%" height="60%" />
+<img src=https://user-images.githubusercontent.com/70783505/229291536-586afcd1-e3e7-490d-a49c-fc33a97458e6.png width="75%" height="75%" />
   
 ２．音声選択  
-<img src=https://user-images.githubusercontent.com/70783505/229291539-e3f296dd-03b7-4c6f-8119-181aabdb5f23.png width="60%" height="60%" />
+<img src=https://user-images.githubusercontent.com/70783505/229291539-e3f296dd-03b7-4c6f-8119-181aabdb5f23.png width="75%" height="75%" />
   
 ３．キャラカスタマイズ  
-<img src=https://user-images.githubusercontent.com/70783505/229291541-7cfef919-391e-4801-82e5-113b17a875d9.png width="60%" height="60%" />
+<img src=https://user-images.githubusercontent.com/70783505/229291541-7cfef919-391e-4801-82e5-113b17a875d9.png width="75%" height="75%" />
   
 ４．会話（音声リプレイ付き）  
-<img src=https://user-images.githubusercontent.com/70783505/229291988-36f43073-ca17-4d75-9f24-b17a8064fdbd.png width="60%" height="60%" />
+<img src=https://user-images.githubusercontent.com/70783505/229291988-36f43073-ca17-4d75-9f24-b17a8064fdbd.png width="75%" height="75%" />
   
 ------------------------
 
