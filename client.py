@@ -1,5 +1,5 @@
 # simple chatbot frontend powered by streamlit, for voicevox chatbot
-# voicevox engine and gpt_flask.py are required
+# voicevox engine required
 # streamlit run client.py
 
 import streamlit as st
@@ -119,8 +119,6 @@ current_speed = girl_settings[4]
 speaker_index = speaker_list.index(current_speaker)
 
 with st.sidebar:
-    st.markdown("""リストをダブルクリックしてね。  
-    新しい会話はリロードで反映されるよ。""")
     if st.button("↻ リロード"):
         st.experimental_rerun()
     c.execute("SELECT * FROM chats WHERE id != 1")
@@ -141,7 +139,7 @@ with st.sidebar:
         conn.commit()
         c.execute("UPDATE chats SET is_current_chat = 1 WHERE id = ?", (selected_id,))
         conn.commit()
-        speaker_index = speaker_list.index(all_chat[selected_id-2][2])
+        speaker_index = speaker_list.index(all_chat[selected_id-2][2]) 
     else:
         st.markdown("まだ会話履歴がありません。")
 
@@ -164,8 +162,8 @@ VOICEVOX_SECOND_ENDPOINT = "/synthesis"
 st.title(f"VOICEVOX女子とおしゃべり！")
 
 def generate_voice(text, speed):
-    params = (
-        ("text", text),
+    params = ( #VOIVEVOX ENGINEの公式辞書機能を使うのが面倒臭くて、ここで強引に置換してます。
+        ("text", text.replace('何でも','なんでも').replace('体育倉庫','たいいくそうこ').replace('な風に','なふうに')),
         ("speaker", speaker)
     )
     pre_voice = requests.post(
@@ -199,7 +197,7 @@ voice_speed = col9.slider("話す速さを調整してね", min_value=0.5, max_v
 c.execute("UPDATE girl_settings SET speed = ? where id = ?", (voice_speed, girl_settings[0]))
 
 if st.checkbox("好きな名前をつける", value=is_custom_name):
-    st.markdown(""":orange[新しい会話を始めると反映されます。チェックを外すと元の名前に戻ります。  
+    st.markdown(""":orange[新しい会話を始めると反映されます。 
     キャラの基本設定と衝突する場合、カスタムキャラ設定の完全上書き推奨。]""")
     name = st.text_input("名前を入力してね", value=current_custom_name)
     c.execute("UPDATE girl_settings SET is_custom_name = ? where id = ?", (1, girl_settings[0]))
@@ -309,8 +307,8 @@ if "chat_history" in st.session_state:
     i=0
     for chat in reversed(st.session_state.chat_history):
         st.markdown(f'<div id=chat{i}>{chat}</div>', unsafe_allow_html=True)
-        params = (
-        ("text", chat.split('： ')[1]),
+        params = ( #VOIVEVOX ENGINEの公式辞書機能を使うのが面倒臭くて、ここで強引に置換してます。
+        ("text", chat.split('： ')[1].replace('何でも','なんでも').replace('体育倉庫','たいいくそうこ').replace('な風に','なふうに')),
         ("speaker", speaker)
         )
         if chat.split('： ')[0] != f'<span style="color:skyblue"><strong>あなた</strong></span>':
