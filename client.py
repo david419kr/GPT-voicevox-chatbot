@@ -148,15 +148,16 @@ c.execute("SELECT * FROM girls_info WHERE name = ?", (speaker_name.split()[0],))
 default_info = c.fetchone()[1]
 c.execute("SELECT * FROM girls_info WHERE name = ?", ("custom",))
 custom_info = c.fetchone()[1]
+if custom_info == " ": custom_info = ''
 
 info = ''
 
 if st.checkbox(f"カスタムキャラ設定を入力する{custom_info and '　※現在、カスタムキャラ設定が入力されています。'}"):
-    st.markdown(""":orange[新しい会話を始めると反映されます。]:red[**チェックを外しても保存されたままなので、**]  
+    st.markdown(""":orange[新しい会話を始めると反映されます。]:red[**チェックを外しても、会話中は保存されたままなので、**]  
     :orange[基本のキャラ設定に戻したい場合は、テキスト欄を空欄にしてから新しい会話を始めてください。  
     基本のキャラ設定を維持したまま、カスタムのキャラ設定を追加することもできますし、  
-    基本のキャラ設定を完全に上書きし、声はそのままで好きなキャラに変身させることもできます。  
-    上書きをする場合、下のチェックボックスをチェックしてください。]""")
+    基本のキャラ設定を完全に上書きし、別人にさせることもできます。  
+    設定を完全上書きする場合、下のチェックボックスをチェックしてください。]""")
     custom_info = st.text_area("カスタムキャラ設定を入力してね", value=custom_info)
     c.execute("UPDATE girls_info SET info = ? WHERE name = ?", (custom_info, "custom"))
     conn.commit()
