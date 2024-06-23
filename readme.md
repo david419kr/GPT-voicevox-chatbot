@@ -1,3 +1,9 @@
+update 240623
+
+*now able to select gpt model  
+*To manage Python dependencies, have implemented venv and requirements.txt.  
+*automated install and run with "start.bat"  
+
 # overview
 
 ChatGPT에 voicevox 여캐들의 설정(혹은 커스텀 설정)을 입력하여 voicevox를 통해 목소리로 읽어주는,  
