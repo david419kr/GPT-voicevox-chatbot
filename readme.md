@@ -18,8 +18,9 @@ Pythonは初めてで、自分用でかなりいい加減な作りです。一�
 # how to use
 1. install python
 2. download and run voicevox engine https://github.com/VOICEVOX/voicevox_engine/releases/latest
-3. open "gpt_api.py", and set your OpenAI API Key(openai.api_key = "SET_YOUR_API_KEY_HERE")
-4. run start.bat
+3. open "SET_YOUR_API_KEY_HERE.txt", and set your OpenAI API Key at the 1st row.
+![example](https://github.com/david419kr/chatGPT-voicevox-chatbot/assets/70783505/df52a83d-b751-44b0-991a-e414686b0c8f)
+4. run "start.bat"
 
 
 # screenshots  
