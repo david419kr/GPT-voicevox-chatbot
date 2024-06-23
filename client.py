@@ -6,8 +6,10 @@ import streamlit as st
 import requests, json, base64, sqlite3
 import streamlit.components.v1 as components
 from streamlit_option_menu import option_menu
+import json
 
 import gpt_api
+import json
 
 hide_menu_style = """
         <style>
@@ -17,83 +19,8 @@ hide_menu_style = """
         """
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
-girls = {
-    "四国めたん": {
-        "ノーマル": 2,
-        "あまあま": 0,
-        "ツンツン": 6,
-        "セクシー": 4,
-        "ささやき": 36,
-        "ヒソヒソ": 37,
-    },
-    "ずんだもん": {
-        "ノーマル": 3,
-        "あまあま": 1,
-        "ツンツン": 7,
-        "セクシー": 5,
-        "ささやき": 22,
-        "ヒソヒソ": 38,
-    },
-    "春日部つむぎ": {
-        "ノーマル": 8,
-    },
-    "雨晴はう": {
-        "ノーマル": 10,
-    },
-    "波音リツ": {
-        "ノーマル": 9,
-    },
-    "冥鳴ひまり": {
-        "ノーマル": 14,
-    },
-    "九州そら": {
-        "ノーマル": 16,
-        "あまあま": 15,
-        "ツンツン": 18,
-        "セクシー": 17,
-        "ささやき": 19,
-    },
-    "もち子さん": {
-        "ノーマル": 20,
-    },
-    "WhiteCUL": {
-        "ノーマル": 23,
-        "たのしい": 24,
-        "かなしい": 25,
-        "びえーん": 26,
-    },
-    "後鬼": {
-        "人間ver.": 27,
-        "ぬいぐるみver.": 28,
-    },
-    "No.7": {
-        "ノーマル": 29,
-        "アナウンス": 30,
-        "読み聞かせ": 31,
-    },
-    "櫻歌ミコ": {
-        "ノーマル": 43,
-        "第二形態": 44,
-        "ロリ": 45,
-    },
-    "小夜": {
-        "ノーマル": 46,
-    },
-    "ナースロボ＿タイプＴ": {
-        "ノーマル": 47,
-        "楽々": 48,
-        "恐怖": 49,
-        "内緒話": 50,
-    },
-    "春歌ナナ": {
-        "ノーマル": 54,
-    },
-    "猫使ビィ": {
-        "ノーマル": 58,
-        "おちつき": 59,
-        "人見知り": 60,
-    },
-}
+with open('girls.json', 'r', encoding='utf-8') as file:
+    girls = json.load(file)
 
 speaker_list = []
 speaker_nametag = []
@@ -120,7 +47,7 @@ speaker_index = speaker_list.index(current_speaker)
 
 with st.sidebar:
     if st.button("↻ リロード"):
-        st.experimental_rerun()
+        st.rerun()
     c.execute("SELECT * FROM chats WHERE id != 1")
     all_chat = c.fetchall()
     
@@ -160,6 +87,13 @@ VOICEVOX_FIRST_ENDPOINT = "/audio_query"
 VOICEVOX_SECOND_ENDPOINT = "/synthesis"
 
 st.title(f"VOICEVOX女子とおしゃべり！")
+col10, col11 = st.columns([0.5, 0.5])
+model = col10.selectbox(
+    "モデルを選んでね",
+    gpt_api.models,
+    index=gpt_api.models.index("gpt-4o")
+)
+
 
 def generate_voice(text, speed):
     params = ( #VOIVEVOX ENGINEの公式辞書機能を使うのが面倒臭くて、ここで強引に置換してます。
@@ -236,7 +170,7 @@ if not info:
 if st.button("新しい会話を始める"):
     chat_history = []
     with st.spinner(f"{name}が自己紹介するよ..."):
-        text, api_messages = gpt_api.initBot(name, info)
+        text, api_messages = gpt_api.initBot(name, info, model)
         chat_history.append(f'<span style="color:#fff5b1"><strong>{name}</strong></span>： {text}')
         c.execute("UPDATE chats SET is_current_chat = ? WHERE id = ?", (0, current_chat[0]))
         conn.commit()
@@ -257,7 +191,7 @@ with st.form(key="form", clear_on_submit=True):
         st.session_state["enabled"] = ""
 
     def generate_response(user_input, api_messages):
-        response, api_messages = gpt_api.talkBot(user_input, api_messages)
+        response, api_messages = gpt_api.talkBot(user_input, api_messages, model)
         return response, api_messages
     
     col1, col2, col3, col4, col5, col6, col7 = st.columns([0.5, 0.6, 1, 0.5, 0.5, 0.5, 0.5])
@@ -280,7 +214,7 @@ with st.form(key="form", clear_on_submit=True):
 
     if col2.form_submit_button("再生成"):
         with st.spinner(f"{current_chat[4]}が考えているよ..."):
-            response, api_messages = gpt_api.regenerate(api_messages)
+            response, api_messages = gpt_api.regenerate(api_messages, model)
             chat_history.pop()
             chat_history.append(f'<span style="color:#fff5b1"><strong>{current_chat[4]}</strong></span>： {response}')
             #play voice
