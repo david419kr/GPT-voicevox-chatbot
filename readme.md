@@ -1,6 +1,7 @@
 update 240623
 
-*now able to select gpt model  
+*updated latest voicevox girls
+*now able to select gpt model   
 *To manage Python dependencies, have implemented venv and requirements.txt.  
 *automated install and run with "start.bat"  
 
@@ -45,13 +46,4 @@ Pythonは初めてで、自分用でかなりいい加減な作りです。一�
   
 ４．会話（音声リプレイ付き）  
 <img src=https://user-images.githubusercontent.com/70783505/229291988-36f43073-ca17-4d75-9f24-b17a8064fdbd.png width="75%" height="75%" />
-  
-------------------------
 
-# 1. gpt_api.py
-need to set OpenAI paid API key here.
-
-# 2. client.py
-simple chatbot frontend powered by streamlit, only for voicevox chatbot  
-voicevox engine required.  
-streamlit run client.py  
