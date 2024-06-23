@@ -1,6 +1,6 @@
 update 240623
 
-*updated latest voicevox girls
+*updated latest voicevox girls  
 *now able to select gpt model   
 *To manage Python dependencies, have implemented venv and requirements.txt.  
 *automated install and run with "start.bat"  
