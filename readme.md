@@ -1,17 +1,5 @@
 # overview
 
-<strong>
-이번 업데이트로, OpenAI 유료 API키가 필요해졌습니다.<br/>
-유료 API키를 쓰지 않으실 분들은 using-chatgpt-wrapper(legacy) 브랜치의 구버전을 이용해주세요.  <br/><br/>
-Now you need OpenAI paid API key.  <br/>
-If you don't want to pay for API, use "using-chatgpt-wrapper(legacy)" branch.  <br/><br/>
-今回のアップデートで、OpenAIの有料APIキーが必要になりました。  <br/>
-有料APIキーを使いたくない方は、using-chatgpt-wrapper(legacy)の旧バージョンをお使いください。  <br/>
-</strong>
-  <br/>
- 
----------------------------------------- 
-
 ChatGPT에 voicevox 여캐들의 설정(혹은 커스텀 설정)을 입력하여 voicevox를 통해 목소리로 읽어주는,  
 voicevox 여캐들과 대화를 할 수 있는(것 같은 기분이 드는) 음성 달린 챗봇입니다.  
 파이썬은 처음 써보는거라 혼자 쓸 용으로 진짜 개발새발 대충 만들었는데 보관용으로 업로드. 일단 작동은 합니다.  
@@ -29,11 +17,9 @@ Pythonは初めてで、自分用でかなりいい加減な作りです。一�
 
 # how to use
 1. install python
-2. (optional) set venv or conda or whatever
-3. download and run voicevox engine https://github.com/VOICEVOX/voicevox_engine/releases/latest
-4. set your paid OpenAI API Key in get_api.py(openai.api_key = "SET_YOUR_API_KEY_HERE")
-5. install streamlit and option menu: pip install streamlit streamlit_option_menu
-6. streamlit run client.py  
+2. download and run voicevox engine https://github.com/VOICEVOX/voicevox_engine/releases/latest
+3. open "gpt_api.py", and set your OpenAI API Key(openai.api_key = "SET_YOUR_API_KEY_HERE")
+4. run start.bat
 
 
 # screenshots  
