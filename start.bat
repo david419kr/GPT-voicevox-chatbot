@@ -7,7 +7,7 @@ if exist "%VENV_DIR%\Scripts\activate.bat" (
     call "%VENV_DIR%\Scripts\activate.bat"
 
     echo Running streamlit application...
-    streamlit run "%~dp0%CLIENT_SCRIPT%"
+    streamlit run "%~dp0codes\%CLIENT_SCRIPT%"
 ) else (
     echo Virtual environment does not exist. Creating a new one...
 
@@ -16,10 +16,10 @@ if exist "%VENV_DIR%\Scripts\activate.bat" (
     call "%VENV_DIR%\Scripts\activate.bat"
 
     echo Installing required packages...
-    pip install -r requirements.txt
+    pip install -r "%~dp0codes\requirements.txt"
 
     echo Running streamlit application...
-    streamlit run "%~dp0%CLIENT_SCRIPT%"
+    streamlit run "%~dp0codes\%CLIENT_SCRIPT%"
 )
 
 echo Done.

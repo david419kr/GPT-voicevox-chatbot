@@ -1,10 +1,14 @@
 import openai
 import requests
-openai.api_key = "SET_YOUR_API_KEY_HERE"
+
+with open("SET_YOUR_API_KEY_HERE.txt", 'r', encoding='utf-8') as file:
+    api_key = file.readline().strip()
+
+openai.api_key = api_key
 
 url = "https://api.openai.com/v1/models"
 headers = {
-    "Authorization": f"Bearer {openai.api_key}"
+    "Authorization": f"Bearer {api_key}"
 }
 response = requests.get(url, headers=headers)
 models = []
