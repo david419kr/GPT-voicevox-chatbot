@@ -1,6 +1,5 @@
 sk-
 xai-
-
 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 Set your OpenAI API key above, at the 1st row.
 Set your Grok API key above, at the 2nd row.
