@@ -12,7 +12,7 @@ if exist "%VENV_DIR%\Scripts\activate.bat" (
     echo Virtual environment does not exist. Creating a new one...
 
     echo Creating virtual environment in %VENV_DIR%
-    python -m venv "%VENV_DIR%
+    python -m venv "%VENV_DIR%"
     call "%VENV_DIR%\Scripts\activate.bat"
 
     echo Installing required packages...
