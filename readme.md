@@ -1,3 +1,10 @@
+update 240623
+
+*updated latest voicevox girls  
+*now able to select gpt model   
+*To manage Python dependencies, have implemented venv and requirements.txt.  
+*automated install and run with "start.bat"  
+
 # overview
 
 ChatGPT에 voicevox 여캐들의 설정(혹은 커스텀 설정)을 입력하여 voicevox를 통해 목소리로 읽어주는,  
@@ -18,8 +25,9 @@ Pythonは初めてで、自分用でかなりいい加減な作りです。一�
 # how to use
 1. install python
 2. download and run voicevox engine https://github.com/VOICEVOX/voicevox_engine/releases/latest
-3. open "gpt_api.py", and set your OpenAI API Key(openai.api_key = "SET_YOUR_API_KEY_HERE")
-4. run start.bat
+3. open "SET_YOUR_API_KEY_HERE.txt", and set your OpenAI API Key at the 1st row.
+![example](https://github.com/david419kr/chatGPT-voicevox-chatbot/assets/70783505/df52a83d-b751-44b0-991a-e414686b0c8f)
+4. run "start.bat"
 
 
 # screenshots  
@@ -38,13 +46,4 @@ Pythonは初めてで、自分用でかなりいい加減な作りです。一�
   
 ４．会話（音声リプレイ付き）  
 <img src=https://user-images.githubusercontent.com/70783505/229291988-36f43073-ca17-4d75-9f24-b17a8064fdbd.png width="75%" height="75%" />
-  
-------------------------
 
-# 1. gpt_api.py
-need to set OpenAI paid API key here.
-
-# 2. client.py
-simple chatbot frontend powered by streamlit, only for voicevox chatbot  
-voicevox engine required.  
-streamlit run client.py  
