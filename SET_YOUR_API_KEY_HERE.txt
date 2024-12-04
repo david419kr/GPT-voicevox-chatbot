@@ -1,6 +1,13 @@
 sk-
+xai-
+
 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 Set your OpenAI API key above, at the 1st row.
+Set your Grok API key above, at the 2nd row.
+
 １行目にOpenAI APIキーを入れて下さい。
+２行目にGrok APIキーを入れて下さい。
+
 첫 줄에 OpenAI API 키를 입력해주세요.
+둘 째 줄에 Grok API 키를 입력해주세요.
 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑

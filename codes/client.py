@@ -6,10 +6,14 @@ import streamlit as st
 import requests, json, base64, sqlite3
 import streamlit.components.v1 as components
 from streamlit_option_menu import option_menu
+from streamlit_local_storage import LocalStorage
 import json
 
 import gpt_api
 import json
+from gpt_api import GPTAPIManager
+
+localStorage = LocalStorage()
 
 hide_menu_style = """
         <style>
@@ -21,7 +25,7 @@ st.markdown(hide_menu_style, unsafe_allow_html=True)
 
 with open('./codes/girls.json', 'r', encoding='utf-8') as file:
     girls = json.load(file)
-
+ 
 speaker_list = []
 speaker_nametag = []
 for girl in girls:
@@ -86,18 +90,74 @@ VOICEVOX_PORT = "50021"
 VOICEVOX_FIRST_ENDPOINT = "/audio_query"
 VOICEVOX_SECOND_ENDPOINT = "/synthesis"
 
+def check_voicevox_server() -> bool:
+    try:
+        response = requests.get(BASE_URL + VOICEVOX_PORT + "/version")
+        return response.status_code == 200
+    except:
+        return False
+
 st.title(f"VOICEVOX女子とおしゃべり！")
-col10, col11 = st.columns([0.5, 0.5])
+
+saved_api = localStorage.getItem("selected_api")
+saved_model = localStorage.getItem("selected_model")
+
+
+if 'selected_api' not in st.session_state:
+    st.session_state.selected_api = saved_api if saved_api else "OpenAI"
+
+if 'selected_model' not in st.session_state:
+    st.session_state.selected_model = saved_model if saved_model else None
+
+
+col12, col10, col11 = st.columns([0.25, 0.45, 0.3])
+api = col12.selectbox(
+    "APIを選んでね",
+    ["OpenAI", "Grok", "Ollama"],
+    index=["OpenAI", "Grok", "Ollama"].index(st.session_state.selected_api),
+    key="api_selection"
+)
+
+if 'gpt_manager' not in st.session_state:
+    st.session_state.gpt_manager = GPTAPIManager(
+        api_type=api
+    )
+
+# API変更感知処理
+if st.session_state.selected_api != api:
+    st.session_state.selected_api = api
+    localStorage.setItem("selected_api", api)
+    st.session_state.gpt_manager.change_api(api)
+    st.session_state.selected_model = None
+
+available_models = st.session_state.gpt_manager.get_available_models()
+
+# モデル有効性チェック
+if (st.session_state.selected_model is None or 
+    st.session_state.selected_model not in available_models):
+    st.session_state.selected_model = available_models[0]
+
 model = col10.selectbox(
     "モデルを選んでね",
-    gpt_api.models,
-    index=gpt_api.models.index("gpt-4o")
+    available_models,
+    index=available_models.index(st.session_state.selected_model),
+    key="model_selection"
 )
+
+# モデル変更感知処理
+if st.session_state.selected_model != model:
+    st.session_state.selected_model = model
+    localStorage.setItem("selected_model", model)
+
+temperature = col11.slider("会話温度（１以下推奨）", min_value=0.1, max_value=2.0, value=0.8, step=0.1)
 
 
 def generate_voice(text, speed):
     params = ( #VOIVEVOX ENGINEの公式辞書機能を使うのが面倒臭くて、ここで強引に置換してます。
-        ("text", text.replace('何でも','なんでも').replace('体育倉庫','たいいくそうこ').replace('な風に','なふうに')),
+        ("text", text
+         .replace('何でも','なんでも')
+         .replace('な風に','なふうに')
+        ),
         ("speaker", speaker)
     )
     pre_voice = requests.post(
@@ -127,7 +187,7 @@ speaker_name = col8.selectbox(
 speaker_index = speaker_nametag.index(speaker_name)
 speaker = speaker_list[speaker_index]
 
-voice_speed = col9.slider("話す速さを調整してね", min_value=0.5, max_value=2.0, value=current_speed, step=0.1)
+voice_speed = col9.slider("話す速さを調整してね", min_value=0.1, max_value=2.0, value=current_speed, step=0.1)
 c.execute("UPDATE girl_settings SET speed = ? where id = ?", (voice_speed, girl_settings[0]))
 
 if st.checkbox("好きな名前をつける", value=is_custom_name):
@@ -169,9 +229,11 @@ if not info:
     info = default_info
 
 if st.button("新しい会話を始める"):
+    if not check_voicevox_server():
+        raise Exception("localhost:50021でVOICEVOXが起動していません。")
     chat_history = []
     with st.spinner(f"{name}が自己紹介するよ..."):
-        text, api_messages = gpt_api.initBot(name, info, model)
+        text, api_messages = gpt_api.initBot(name, info, model, temperature)
         chat_history.append(f'<span style="color:#fff5b1"><strong>{name}</strong></span>： {text}')
         c.execute("UPDATE chats SET is_current_chat = ? WHERE id = ?", (0, current_chat[0]))
         conn.commit()
@@ -192,12 +254,14 @@ with st.form(key="form", clear_on_submit=True):
         st.session_state["enabled"] = ""
 
     def generate_response(user_input, api_messages):
-        response, api_messages = gpt_api.talkBot(user_input, api_messages, model)
+        response, api_messages = gpt_api.talkBot(user_input, api_messages, model, temperature)
         return response, api_messages
     
     col1, col2, col3, col4, col5, col6, col7 = st.columns([0.5, 0.6, 1, 0.5, 0.5, 0.5, 0.5])
 
     if col1.form_submit_button(label="送信"):
+        if not check_voicevox_server():
+            raise Exception("localhost:50021でVOICEVOXが起動していません。")
         if user_input:
             chat_history.append(f'<span style="color:skyblue"><strong>あなた</strong></span>： {user_input}')
             st.session_state.chat_history = chat_history
@@ -214,8 +278,10 @@ with st.form(key="form", clear_on_submit=True):
             st.session_state.user_input = ""
 
     if col2.form_submit_button("再生成"):
+        if not check_voicevox_server():
+            raise Exception("localhost:50021でVOICEVOXが起動していません。")
         with st.spinner(f"{current_chat[4]}が考えているよ..."):
-            response, api_messages = gpt_api.regenerate(api_messages, model)
+            response, api_messages = gpt_api.regenerate(api_messages, model, temperature)
             chat_history.pop()
             chat_history.append(f'<span style="color:#fff5b1"><strong>{current_chat[4]}</strong></span>： {response}')
             #play voice
@@ -237,6 +303,8 @@ with st.form(key="form", clear_on_submit=True):
         else:
             st.warning("直近の送信がありません")
 
+if not check_voicevox_server():
+    st.warning("localhost:50021でVOICEVOXが起動していません。")
 
 if "chat_history" in st.session_state:
     i=0
@@ -261,4 +329,3 @@ if "chat_history" in st.session_state:
                                 data=json.dumps(pre_voice))
                     st.audio(voice.content, format='audio/wav', start_time=0)
         i+=1
-
