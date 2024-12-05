@@ -2,6 +2,8 @@
 
 *ChatGPT以外に、Grok APIとOllamaに対応しました。  
 *モデルの会話温度を設定できるようになりました。   
+*GUI上でAPIキーを設定できるようになりました。   
+*環境変数にOPENAI_API_KEYが設定されていたら、自動で読み込むようになりました。   
 
 
 # overview
@@ -17,8 +19,8 @@ Pythonは初めてで、自分用でかなりいい加減な作りです。一�
 1. Pythonをインストールします。（3.10で動作確認しました）
 2. このレポジトリーをgit cloneするか、[Download ZIP](https://github.com/david419kr/GPT-voicevox-chatbot/archive/refs/heads/main.zip)します。
 3. [Voicevox Engine](https://github.com/VOICEVOX/voicevox_engine/releases/latest)をインストールします。
-4. "SET_YOUR_API_KEY_HERE.txt"に、OpenAI APIキーとGrok APIキーを入れます。Ollamaのみ使う場合はスルーで。
-![image](https://github.com/user-attachments/assets/bfa9d079-bd0d-419f-b45b-bef233ef9ca6)
+4. 左上の設定メニューで、APIキーを入れます。Ollamaのみ使う場合はスルーで。
+![image](https://github.com/user-attachments/assets/85cea092-1aba-4496-9e53-256121cb1e05)
 
 5. "start.bat"で起動します。初起動の場合、自動でvenvが生成されインストールされます。
 
