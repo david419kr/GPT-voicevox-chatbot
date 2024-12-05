@@ -57,7 +57,13 @@ class GPTAPIManager:
                     raise Exception(f"有効なモデルが見つかりませんでした。")
             return models
         except Exception as e:
-            raise Exception(f"有効なAPIキーが設定されていないか、APIに接続できませんでした。")
+            if self.api_type == "OpenAI":
+                return ["gpt-4o-mini", "gpt-4o"]
+            elif self.api_type == "Grok":
+                return ["grok-beta"]
+            elif self.api_type == "Ollama":
+                raise Exception(f"有効なモデルが見つかりませんでした。")
+            # raise Exception(f"有効なAPIキーが設定されていないか、APIに接続できませんでした。")
 
     def change_api(self, new_api_type: str):
         if new_api_type == "Ollama" and not check_ollama_server():
