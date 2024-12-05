@@ -28,7 +28,7 @@ Pythonは初めてで、自分用でかなりいい加減な作りです。一�
 # screenshots  
 
 １．メイン画面  
-![image](https://github.com/user-attachments/assets/66d735f3-4021-4cab-b98f-5ac3e4f27423)
+![image](https://github.com/user-attachments/assets/0cf87397-66dc-4abe-8d63-838762d62d9b)
 
   
 ２．音声選択  
@@ -43,5 +43,6 @@ Pythonは初めてで、自分用でかなりいい加減な作りです。一�
 ![image](https://github.com/user-attachments/assets/8c46284c-56c2-4f3b-8e6e-932fda106314)
 
 5. 会話（音声リプレイ付き）  
-![image](https://github.com/user-attachments/assets/7f24f5a2-0579-4851-8d53-a5d5a15a23be)
+![image](https://github.com/user-attachments/assets/4a75cfef-7b3f-414e-8086-afe1b2e92fc6)
+
 
