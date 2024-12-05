@@ -23,7 +23,13 @@ def create_settings_modal():
                     localStorage.setItem("openai_api_key", saved_openai_key, key="openai_api_key1")
             else:
                 saved_openai_key = localStorage.getItem("openai_api_key")
-            saved_grok_key = localStorage.getItem("grok_api_key")
+            XAI_API_KEY = os.environ.get("XAI_API_KEY")
+            if XAI_API_KEY:
+                saved_grok_key = XAI_API_KEY
+                if not localStorage.getItem("grok_api_key"):
+                    localStorage.setItem("grok_api_key", saved_grok_key, key="grok_api_key1")
+            else:
+                saved_grok_key = localStorage.getItem("grok_api_key")
             
             openai_key = st.text_input(
                 "OpenAI APIキー",
@@ -43,7 +49,7 @@ def create_settings_modal():
                 if openai_key:
                     localStorage.setItem("openai_api_key", openai_key, key="openai_api_key2")
                 if grok_key:
-                    localStorage.setItem("grok_api_key", grok_key, key="grok_api_key")
+                    localStorage.setItem("grok_api_key", grok_key, key="grok_api_key2")
                 st.success("APIキーが保存されました。")
                 st.rerun()
 
