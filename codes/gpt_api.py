@@ -2,11 +2,6 @@ import openai
 from typing import List
 import requests
 
-with open("SET_YOUR_API_KEY_HERE.txt", 'r', encoding='utf-8') as file:
-    lines = file.readlines()
-    api_key_openai = lines[0].strip() if len(lines) > 0 else None
-    api_key_grok = lines[1].strip() if len(lines) > 1 else None
-
 def check_ollama_server() -> bool:
     try:
         response = requests.get("http://localhost:11434")
@@ -27,18 +22,20 @@ class GPTAPIManager:
         }
     }
 
-    def __init__(self, api_type: str):
+    def __init__(self, api_type: str, api_key_openai: str, api_key_grok: str):
         self.api_type = api_type
+        self.api_key_openai = api_key_openai
+        self.api_key_grok = api_key_grok
         self.client = self._initialize_client()
         self.available_models = self._get_available_models()
 
     def _initialize_client(self):
         if self.api_type == "OpenAI":
             openai.api_base = self.API_CONFIGS["OpenAI"]["base_url"]
-            openai.api_key = api_key_openai
+            openai.api_key = self.api_key_openai
         elif self.api_type == "Grok":
             openai.api_base = self.API_CONFIGS["Grok"]["base_url"]
-            openai.api_key = api_key_grok
+            openai.api_key = self.api_key_grok
         elif self.api_type == "Ollama":
             openai.api_base = self.API_CONFIGS["Ollama"]["base_url"]
             openai.api_key = "ollama"

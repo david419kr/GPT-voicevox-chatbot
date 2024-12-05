@@ -7,13 +7,45 @@ import requests, json, base64, sqlite3
 import streamlit.components.v1 as components
 from streamlit_option_menu import option_menu
 from streamlit_local_storage import LocalStorage
-import json
-
+import json, os
 import gpt_api
-import json
 from gpt_api import GPTAPIManager
 
 localStorage = LocalStorage()
+
+def create_settings_modal():
+    with st.sidebar:
+        with st.expander("⚙️ APIキー設定", expanded=False):
+            OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+            if OPENAI_API_KEY:
+                saved_openai_key = OPENAI_API_KEY
+                if not localStorage.getItem("openai_api_key"):
+                    localStorage.setItem("openai_api_key", saved_openai_key, key="openai_api_key1")
+            else:
+                saved_openai_key = localStorage.getItem("openai_api_key")
+            saved_grok_key = localStorage.getItem("grok_api_key")
+            
+            openai_key = st.text_input(
+                "OpenAI APIキー",
+                type="password",
+                value=saved_openai_key if saved_openai_key else "",
+                key="openai_key_input"
+            )
+            
+            grok_key = st.text_input(
+                "Grok APIキー",
+                type="password",
+                value=saved_grok_key if saved_grok_key else "",
+                key="grok_key_input"
+            )
+            
+            if st.button("APIキーを保存する"):
+                if openai_key:
+                    localStorage.setItem("openai_api_key", openai_key, key="openai_api_key2")
+                if grok_key:
+                    localStorage.setItem("grok_api_key", grok_key, key="grok_api_key")
+                st.success("APIキーが保存されました。")
+                st.rerun()
 
 hide_menu_style = """
         <style>
@@ -48,6 +80,9 @@ is_custom_name = girl_settings[3]
 current_speed = girl_settings[4]
 
 speaker_index = speaker_list.index(current_speaker)
+
+with st.sidebar:
+    create_settings_modal()
 
 with st.sidebar:
     if st.button("↻ リロード"):
@@ -96,6 +131,13 @@ def check_voicevox_server() -> bool:
         return response.status_code == 200
     except:
         return False
+    
+def check_ollama_server() -> bool:
+    try:
+        response = requests.get("http://localhost:11434")
+        return response.status_code == 200
+    except requests.exceptions.ConnectionError:
+        return False
 
 st.title(f"VOICEVOX女子とおしゃべり！")
 
@@ -120,7 +162,9 @@ api = col12.selectbox(
 
 if 'gpt_manager' not in st.session_state:
     st.session_state.gpt_manager = GPTAPIManager(
-        api_type=api
+        api_type=api,
+        api_key_openai=localStorage.getItem("openai_api_key"),
+        api_key_grok=localStorage.getItem("grok_api_key")
     )
 
 # API変更感知処理
@@ -305,6 +349,13 @@ with st.form(key="form", clear_on_submit=True):
 
 if not check_voicevox_server():
     st.warning("localhost:50021でVOICEVOXが起動していません。")
+
+if st.session_state.selected_api == "OpenAI" and not localStorage.getItem("openai_api_key"):
+    st.warning("OpenAI APIキーが見つかりませんでした。左上の⚙️メニューでAPIキーを入れて下さい。")
+elif st.session_state.selected_api == "Grok" and not localStorage.getItem("grok_api_key"):
+    st.warning("Grok APIキーが見つかりませんでした。左上の⚙️メニューでAPIキーを入れて下さい。")
+elif st.session_state.selected_api == "Ollama" and not check_ollama_server():
+    st.warning("localhost:11434でOllamaが起動していません。")
 
 if "chat_history" in st.session_state:
     i=0
