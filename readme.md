@@ -2,6 +2,8 @@
 
 *ChatGPT以外に、Grok APIとOllamaに対応しました。  
 *モデルの会話温度を設定できるようになりました。   
+*GUI上でAPIキーを設定できるようになりました。   
+*環境変数にOPENAI_API_KEYが設定されていたら、自動で読み込むようになりました。   
 
 
 # overview
@@ -17,8 +19,8 @@ Pythonは初めてで、自分用でかなりいい加減な作りです。一�
 1. Pythonをインストールします。（3.10で動作確認しました）
 2. このレポジトリーをgit cloneするか、[Download ZIP](https://github.com/david419kr/GPT-voicevox-chatbot/archive/refs/heads/main.zip)します。
 3. [Voicevox Engine](https://github.com/VOICEVOX/voicevox_engine/releases/latest)をインストールします。
-4. "SET_YOUR_API_KEY_HERE.txt"に、OpenAI APIキーとGrok APIキーを入れます。Ollamaのみ使う場合はスルーで。
-![image](https://github.com/user-attachments/assets/bfa9d079-bd0d-419f-b45b-bef233ef9ca6)
+4. 左上の設定メニューで、APIキーを入れます。Ollamaのみ使う場合はスルーで。
+![image](https://github.com/user-attachments/assets/85cea092-1aba-4496-9e53-256121cb1e05)
 
 5. "start.bat"で起動します。初起動の場合、自動でvenvが生成されインストールされます。
 
@@ -26,7 +28,7 @@ Pythonは初めてで、自分用でかなりいい加減な作りです。一�
 # screenshots  
 
 １．メイン画面  
-![image](https://github.com/user-attachments/assets/66d735f3-4021-4cab-b98f-5ac3e4f27423)
+![image](https://github.com/user-attachments/assets/0cf87397-66dc-4abe-8d63-838762d62d9b)
 
   
 ２．音声選択  
@@ -41,5 +43,6 @@ Pythonは初めてで、自分用でかなりいい加減な作りです。一�
 ![image](https://github.com/user-attachments/assets/8c46284c-56c2-4f3b-8e6e-932fda106314)
 
 5. 会話（音声リプレイ付き）  
-![image](https://github.com/user-attachments/assets/7f24f5a2-0579-4851-8d53-a5d5a15a23be)
+![image](https://github.com/user-attachments/assets/4a75cfef-7b3f-414e-8086-afe1b2e92fc6)
+
 
