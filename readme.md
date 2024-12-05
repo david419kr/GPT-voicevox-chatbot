@@ -3,7 +3,7 @@
 *ChatGPT以外に、Grok APIとOllamaに対応しました。  
 *モデルの会話温度を設定できるようになりました。   
 *GUI上でAPIキーを設定できるようになりました。   
-*環境変数にOPENAI_API_KEYが設定されていたら、自動で読み込むようになりました。   
+*環境変数にOPENAI_API_KEYやXAI_API_KEYが設定されていたら、自動で読み込むようになりました。   
 
 
 # overview
