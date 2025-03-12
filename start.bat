@@ -5,6 +5,8 @@ set "CLIENT_SCRIPT=client.py"
 if exist "%VENV_DIR%\Scripts\activate.bat" (
     echo Virtual environment already exists. Activating it...
     call "%VENV_DIR%\Scripts\activate.bat"
+	
+	pip install -r "%~dp0codes\requirements.txt" --disable-pip-version-check | findstr /v "already satisfied"
 
     echo Running streamlit application...
     streamlit run "%~dp0codes\%CLIENT_SCRIPT%"
