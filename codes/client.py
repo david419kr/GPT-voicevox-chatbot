@@ -7,6 +7,7 @@ import requests, json, base64, sqlite3
 import streamlit.components.v1 as components
 from streamlit_option_menu import option_menu
 from streamlit_local_storage import LocalStorage
+from streamlit_js_eval import streamlit_js_eval
 import json, os
 import gpt_api
 from gpt_api import GPTAPIManager
@@ -51,7 +52,7 @@ def create_settings_modal():
                 if grok_key:
                     localStorage.setItem("grok_api_key", grok_key, key="grok_api_key2")
                 st.success("APIキーが保存されました。")
-                st.rerun()
+                streamlit_js_eval(js_expressions="parent.window.location.reload()")
 
 hide_menu_style = """
         <style>
