@@ -78,11 +78,11 @@ def initBot(name, info, model, temperature):
     currentModel = model
     messages = [{
             "role": "system",
-            "content": f"あなたは、「{name}」という名前の女の子です。以下、キャラクターに関する情報を与えます。{info}以上のことを踏まえて、{name}というキャラクターを最後まで演じ切りなさい。"
+            "content": f"あなたは、「{name}」という名前の女の子です。以下、キャラクターに関する情報を与えます。以下のことを踏まえて、{name}というキャラクターを最後まで演じ切りなさい。{info}"
         },
         {
             "role": "user",
-            "content": "まずは、挨拶からお願いします。"
+            "content": "システムプロンプトに指定された状況に沿って会話を初めてください。"
         }]
 
     completion = openai.ChatCompletion.create(
