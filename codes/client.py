@@ -3,16 +3,107 @@
 # streamlit run client.py
 
 import streamlit as st
-import requests, json, base64, sqlite3
+import requests, json, base64, sqlite3, io, re, wave, os, csv
 import streamlit.components.v1 as components
 from streamlit_option_menu import option_menu
 from streamlit_local_storage import LocalStorage
 from streamlit_js_eval import streamlit_js_eval
-import json, os
 import gpt_api
 from gpt_api import GPTAPIManager
+from typing import Literal
 
 localStorage = LocalStorage()
+
+MAX_LEN = 1000
+_SPLIT_RE = re.compile(r"[,\.、。]")
+
+def _split_text(text: str, limit: int = MAX_LEN) -> list[str]:
+    chunks, pos = [], 0
+    while pos < len(text):
+        end = min(pos + limit, len(text))
+        seg  = text[pos:end]
+        hits = list(_SPLIT_RE.finditer(seg))
+        if hits:
+            end = hits[-1].end() + pos
+        chunks.append(text[pos:end])
+        pos = end
+    return chunks
+
+def _tts_chunk(chunk: str, speaker: int, speed: float) -> bytes:
+    params = (("text", chunk), ("speaker", speaker))
+    query  = requests.post(
+        BASE_URL + VOICEVOX_PORT + VOICEVOX_FIRST_ENDPOINT,
+        params=params).json()
+    query["speedScale"] = speed
+    wav   = requests.post(
+        BASE_URL + VOICEVOX_PORT + VOICEVOX_SECOND_ENDPOINT,
+        headers={"Content-Type": "application/json"},
+        params=params,
+        data=json.dumps(query))
+    wav.raise_for_status()
+    return wav.content          # bytes
+
+def _merge_wavs(wavs: list[bytes]) -> bytes:
+    frames, params = [], None
+    for b in wavs:
+        with wave.open(io.BytesIO(b), "rb") as w:
+            if params is None:
+                params = w.getparams()
+            frames.append(w.readframes(w.getnframes()))
+    out = io.BytesIO()
+    with wave.open(out, "wb") as w:
+        w.setparams(params)
+        for f in frames:
+            w.writeframes(f)
+    return out.getvalue()
+
+def tts_voicevox(
+    text: str,
+    speaker: int = 1,
+    speed  : float = 1.0,
+    as_format: Literal["bytes", "base64"] = "bytes"
+):
+    """
+    長文を自動分割して VoiceVox で TTS し、結合する。
+
+    Parameters
+    ----------
+    text       : 読み上げるテキスト
+    speaker    : VoiceVox speaker ID
+    speed      : 再生速度
+    as_format  : "bytes" -> WAV バイト列, "base64" -> base64 文字列
+
+    Returns
+    -------
+    bytes  or str
+    """
+    wavs   = [_tts_chunk(c, speaker, speed) for c in _split_text(text)]
+    merged = _merge_wavs(wavs)
+    if as_format == "bytes":
+        return merged
+    return base64.b64encode(merged).decode()
+
+def load_replacements(csv_path: str, encoding: str = 'utf-8') -> list[tuple[str, str]]:
+    """
+    CSV 파일을 읽어서 (원본, 치환) 튜플 목록을 반환.
+    """
+    replacements = []
+    with open(csv_path, encoding=encoding, newline='') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            # 공백 제거, 빈 줄 스킵
+            if not row or len(row) < 2:
+                continue
+            orig, repl = row[0].strip(), row[1].strip()
+            replacements.append((orig, repl))
+    return replacements
+
+dictionary = load_replacements('dictionary.csv')
+
+def apply_replacements(text: str, rules: list[tuple[str, str]]) -> str:
+    for orig, repl in rules:
+        text = text.replace(orig, repl) 
+    return text
 
 def create_settings_modal():
     with st.sidebar:
@@ -204,22 +295,21 @@ temperature = col11.slider("会話温度（１以下推奨）", min_value=0.1, m
 
 
 def generate_voice(text, speed):
-    params = ( #VOIVEVOX ENGINEの公式辞書機能を使うのが面倒臭くて、ここで強引に置換してます。
-        ("text", text
-         .replace('何でも','なんでも')
-         .replace('な風に','なふうに')
-        ),
-        ("speaker", speaker)
-    )
-    pre_voice = requests.post(
-        BASE_URL + VOICEVOX_PORT + VOICEVOX_FIRST_ENDPOINT,
-        params=params).json()
-    pre_voice['speedScale'] = speed
-    voice = requests.post(BASE_URL + VOICEVOX_PORT + VOICEVOX_SECOND_ENDPOINT,
-                  headers={"Content-Type": "application/json"},
-                  params = params,
-                  data=json.dumps(pre_voice))
-    b64 = base64.b64encode(voice.content).decode()
+    processed_text = apply_replacements(text, dictionary)
+    # params = (
+    #     ("text", processed_text),
+    #     ("speaker", speaker)
+    # )
+    # pre_voice = requests.post(
+    #     BASE_URL + VOICEVOX_PORT + VOICEVOX_FIRST_ENDPOINT,
+    #     params=params).json()
+    # pre_voice['speedScale'] = speed
+    # voice = requests.post(BASE_URL + VOICEVOX_PORT + VOICEVOX_SECOND_ENDPOINT,
+    #               headers={"Content-Type": "application/json"},
+    #               params = params,
+    #               data=json.dumps(pre_voice))
+    # b64 = base64.b64encode(voice.content).decode()
+    b64 = tts_voicevox(processed_text, speaker, speed, as_format="base64")
     md = f"""
             <audio control autoplay="true">
             <source src="data:audio/wav;base64,{b64}" type="audio/wav">
@@ -355,7 +445,7 @@ with st.form(key="form", clear_on_submit=True):
             st.warning("直近の送信がありません")
 
 if not check_voicevox_server():
-    st.warning("localhost:50021でVOICEVOXが起動していません。")
+    st.warning("localhost:50021でVOICEVOXが起動していません。")  
 
 if st.session_state.selected_api == "OpenAI" and not localStorage.getItem("openai_api_key"):
     st.warning("OpenAI APIキーが見つかりませんでした。左上の⚙️メニューでAPIキーを入れて下さい。")
@@ -368,22 +458,31 @@ if "chat_history" in st.session_state:
     i=0
     for chat in reversed(st.session_state.chat_history):
         st.markdown(f'<div id=chat{i}>{chat}</div>', unsafe_allow_html=True)
-        params = ( #VOIVEVOX ENGINEの公式辞書機能を使うのが面倒臭くて、ここで強引に置換してます。
-        ("text", chat.split('： ')[1].replace('何でも','なんでも').replace('体育倉庫','たいいくそうこ').replace('な風に','なふうに')),
-        ("speaker", speaker)
-        )
+        raw_text = chat.split('： ', 1)[1]
+        processed_text = apply_replacements(raw_text, dictionary)
+        # params = (
+        #     ("text", processed_text),
+        #     ("speaker", speaker)
+        # )
         if chat.split('： ')[0] != f'<span style="color:skyblue"><strong>あなた</strong></span>':
             tmp = st.empty()
             if tmp.button(f"▶️ リプレイ", str(i)):
                 tmp.empty()
                 with st.spinner(f"{current_chat[4]}が読み上げているよ..."):
-                    pre_voice = requests.post(
-                        BASE_URL + VOICEVOX_PORT + VOICEVOX_FIRST_ENDPOINT,
-                        params=params).json()
-                    pre_voice['speedScale'] = voice_speed
-                    voice = requests.post(BASE_URL + VOICEVOX_PORT + VOICEVOX_SECOND_ENDPOINT,
-                                headers={"Content-Type": "application/json"},
-                                params = params,
-                                data=json.dumps(pre_voice))
-                    st.audio(voice.content, format='audio/wav', start_time=0)
+                    # pre_voice = requests.post(
+                    #     BASE_URL + VOICEVOX_PORT + VOICEVOX_FIRST_ENDPOINT,
+                    #     params=params).json()
+                    # pre_voice['speedScale'] = voice_speed
+                    # voice = requests.post(BASE_URL + VOICEVOX_PORT + VOICEVOX_SECOND_ENDPOINT,
+                    #             headers={"Content-Type": "application/json"},
+                    #             params = params,
+                    #             data=json.dumps(pre_voice))
+                    # st.audio(voice.content, format='audio/wav', start_time=0)
+                    wav_bytes = tts_voicevox(
+                        processed_text,
+                        speaker=speaker,
+                        speed=voice_speed,
+                        as_format="bytes"   # ← WAV bytes で取得
+                        )
+                    st.audio(wav_bytes, format="audio/wav", start_time=0)
         i+=1
